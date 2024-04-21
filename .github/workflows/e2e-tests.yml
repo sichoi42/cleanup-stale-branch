@@ -1,0 +1,39 @@
+name: e2e tests
+
+on:
+  pull_request:
+    paths-ignore:
+      - '**.md'
+  push:
+    branches:
+      - main
+      - releases/*
+    paths-ignore:
+      - '**.md'
+
+env:
+  DAYS_BEFORE_STALE: 30
+  DAYS_BEFORE_DELETION: 7
+
+jobs:
+  dry-run-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./
+        id: stale
+        with:
+          days-before-stale: ${{ env.DAYS_BEFORE_STALE }}
+          days-before-deletion: ${{ env.DAYS_BEFORE_DELETION }}
+          ignore-branches: 'main'
+          ignore-branches-pattern: 'release/*'
+          webhook-url: ${{ secrets.WEBHOOK_URL }}
+          webhook-type: 'discord'
+          stale-branch-message: >
+            This branch is considered stale because ${{ env.DAYS_BEFORE_STALE }} days have passed since the last commit.
+            If you still need this branch, please push a new commit to keep it alive.
+            If not, this branch will be deleted in ${{ env.DAYS_BEFORE_DELETION }} days.
+          delete-branch-message: >
+            This branch was deleted because ${{ env.DAYS_BEFORE_DELETION }} days have passed since considered as stale.
+      - name: Print outputs
+        run: echo ${{ format('{0},{1}', toJSON(steps.stale.outputs.staled-branches), toJSON(steps.stale.outputs.deleted-branches)) }}

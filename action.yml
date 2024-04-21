@@ -27,6 +27,10 @@ inputs:
     description: 'Webhook URL to send a message when branches are be considered for deletion or deleted.' Recomment to use `{{ secrets.WEBHOOK_URL }}`.'
     required: false
     default: ""
+  webhook-type:
+    description: 'The type of webhook to send. Can be `discord` or `slack`.'
+    required: false
+    default: "discord"
   stale-branch-message:
     description: 'The message to post on webhook when a branch is considered stale.'
     required: false
@@ -41,6 +45,8 @@ inputs:
     default: false
 
 outputs:
+  staled-branches:
+    description: 'The list of branches that were considered stale.'
   deleted-branches:
     description: 'The list of branches that were deleted.'
 
