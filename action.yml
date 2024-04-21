@@ -1,5 +1,45 @@
 name: "Cleanup Stale Branches Action"
 description: "Automatically find up stale branches and cleanup them"
+author: "Siwon Choi"
+
+inputs:
+  repo-token:
+    description: 'Token for the repository. Can be passed in using `{{ secrets.GITHUB_TOKEN }}`.'
+    required: false
+    default: ${{ github.token }}
+  days-before-stale:
+    description: 'The age in days before a branch is considered stale.' Can be passed in using `30`.'
+    required: false
+    default: 30
+  dasys-before-deletion:
+    description: 'The age in days before a branch is considered for deletion.' Can be passed in using `7`.'
+    required: false
+    default: 7
+  ignore-branches:
+    description: 'Comma separated list of branches that should be ignored.' Default is `main,master`.'
+    required: false
+    default: "main,master"
+  ignore-branches-pattern:
+    description: 'Pattern of branches that should be ignored.'
+    required: false
+    default: ""
+  webhook-url:
+    description: 'Webhook URL to send a message when branches are be considered for deletion or deleted.' Recomment to use `{{ secrets.WEBHOOK_URL }}`.'
+    required: false
+    default: ""
+  dry-run:
+    description: 'If true, the action will only log the branches that would be deleted.'
+    required: false
+    default: false
+
+outputs:
+  deleted-branches:
+    description: 'The list of branches that were deleted.'
+
+branding:
+  icon: "trash"
+  color: "red"
+
 runs:
   using: "node20"
-  main: "index.js"
+  main: "dist/index.js"
