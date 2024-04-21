@@ -1,0 +1,5 @@
+name: "Cleanup Stale Branches Action"
+description: "Automatically find up stale branches and cleanup them"
+runs:
+  using: "node20"
+  main: "index.js"

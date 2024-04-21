@@ -1,0 +1,16 @@
+name: Clean Up Branches
+
+on:
+  workflow_dispatch:
+
+jobs:
+  branch_cleaner:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Clean up branches
+        uses: ./
+        with:
+          base_branches: "main"
+          token: ${{ secrets.GITHUB_TOKEN }}
