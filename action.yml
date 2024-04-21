@@ -11,26 +11,18 @@ inputs:
     description: 'The age in days before a branch is considered stale.' Can be passed in using `30`.'
     required: false
     default: 30
-  dasys-before-deletion:
+  dasys-before-delete:
     description: 'The age in days before a branch is considered for deletion.' Can be passed in using `7`.'
     required: false
     default: 7
-  ignore-branches:
+  ignoring-branches:
     description: 'Comma separated list of branches that should be ignored.' Default is `main,master`.'
     required: false
-    default: "main,master"
+    default: ["main", "master"]
   ignore-branches-pattern:
     description: 'Pattern of branches that should be ignored.'
     required: false
     default: ""
-  webhook-url:
-    description: 'Webhook URL to send a message when branches are be considered for deletion or deleted.' Recomment to use `{{ secrets.WEBHOOK_URL }}`.'
-    required: false
-    default: ""
-  webhook-type:
-    description: 'The type of webhook to send. Can be `discord` or `slack`.'
-    required: false
-    default: "discord"
   stale-branch-message:
     description: 'The message to post on webhook when a branch is considered stale.'
     required: false
@@ -43,6 +35,19 @@ inputs:
     description: 'If true, the action will only log the branches that would be deleted.'
     required: false
     default: false
+  use-webhook:
+    description: 'If true, the action will send a message to webhook when branches are be considered for deletion or deleted.'
+    required: false
+    default: false
+  # These options are only used when `use-webhook` is true
+  webhook-url:
+    description: 'Webhook URL to send a message when branches are be considered for deletion or deleted.' Recomment to use `{{ secrets.WEBHOOK_URL }}`.'
+    required: false
+    default: ""
+  webhook-type:
+    description: 'The type of webhook to send. Can be `discord` or `slack`.'
+    required: false
+    default: "discord"
 
 outputs:
   staled-branches:
