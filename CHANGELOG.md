@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.8](https://github.com/sichoi42/cleanup-stale-branch/compare/v1.1.7...v1.1.8) (2024-04-22)
+
+
+### Features
+
+* send committer info to message ([6063453](https://github.com/sichoi42/cleanup-stale-branch/commit/6063453ff87db3b3f8e086af822d8f8bedac3e4f))
+
 ### [1.1.7](https://github.com/sichoi42/cleanup-stale-branch/compare/v1.1.6...v1.1.7) (2024-04-22)
 
 
