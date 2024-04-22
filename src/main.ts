@@ -72,14 +72,19 @@ async function _run(): Promise<void> {
       }
     }
 
-    for (const branch of deleteBranches) {
-      if (!args.dryRun) {
+    core.info(`Staled branches: ${staleBranches.join(', ')}`);
+    core.info(`Will be deleted branches: ${deleteBranches.join(', ')}`);
+
+    if (!args.dryRun) {
+      for (const branch of deleteBranches) {
         await client.git.deleteRef({
           ...context.repo,
           ref: `heads/${branch}`
         });
+        core.info(`Branch ${branch} deleted.`);
       }
-      core.info(`Branch ${branch} deleted.`);
+    } else {
+      core.info('Dry run enabled. Branches will not actually be deleted.');
     }
 
     core.setOutput('staled-branches', staleBranches.join(', '));

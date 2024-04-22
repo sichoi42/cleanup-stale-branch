@@ -86,11 +86,16 @@ function _run() {
                     }
                 }
             }
-            for (const branch of deleteBranches) {
-                if (!args.dryRun) {
+            core.info(`Staled branches: ${staleBranches.join(', ')}`);
+            core.info(`Will be deleted branches: ${deleteBranches.join(', ')}`);
+            if (!args.dryRun) {
+                for (const branch of deleteBranches) {
                     yield client.git.deleteRef(Object.assign(Object.assign({}, github_1.context.repo), { ref: `heads/${branch}` }));
+                    core.info(`Branch ${branch} deleted.`);
                 }
-                core.info(`Branch ${branch} deleted.`);
+            }
+            else {
+                core.info('Dry run enabled. Branches will not actually be deleted.');
             }
             core.setOutput('staled-branches', staleBranches.join(', '));
             core.setOutput('deleted-branches', deleteBranches.join(', '));
