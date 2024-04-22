@@ -61,7 +61,11 @@ async function _run(): Promise<void> {
           if (branchDate < staleDate) {
             staleBranches.push(branch.name);
           }
-          if (branchDate < deleteDate) {
+          if (
+            !branch.protected &&
+            branchDate < deleteDate &&
+            !staleBranches.includes(branch.name)
+          ) {
             deleteBranches.push(branch.name);
           }
         }
