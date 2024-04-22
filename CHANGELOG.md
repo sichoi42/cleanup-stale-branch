@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.2](https://github.com/sichoi42/cleanup-stale-branch/compare/v1.1.1...v1.1.2) (2024-04-22)
+
+
+### Bug Fixes
+
+* example action ([8a42c80](https://github.com/sichoi42/cleanup-stale-branch/commit/8a42c803ef3ff5b07f5e2b78477c26445eeb842b))
+
 ### [1.1.1](https://github.com/sichoi42/cleanup-stale-branch/compare/v1.1.0...v1.1.1) (2024-04-22)
 
 
