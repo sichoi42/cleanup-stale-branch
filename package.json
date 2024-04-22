@@ -1,6 +1,6 @@
 {
   "name": "cleanup-stale-branch",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "private": true,
   "description": "Automatically find up stale branches and cleanup them",
   "main": "lib/main.js",
