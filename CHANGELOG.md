@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.11](https://github.com/sichoi42/cleanup-stale-branch/compare/v1.1.10...v1.1.11) (2024-04-22)
+
+
+### Bug Fixes
+
+* fix bug on delete date logic ([316889f](https://github.com/sichoi42/cleanup-stale-branch/commit/316889f542e9e9662e2a87052985e8c9a4325f60))
+
 ### [1.1.10](https://github.com/sichoi42/cleanup-stale-branch/compare/v1.1.9...v1.1.10) (2024-04-22)
 
 ### [1.1.9](https://github.com/sichoi42/cleanup-stale-branch/compare/v1.1.8...v1.1.9) (2024-04-22)
