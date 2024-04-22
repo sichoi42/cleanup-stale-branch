@@ -1,5 +1,6 @@
 export interface BranchInfo {
   branchName: string;
+  branchUrl: string;
   committer: Committer;
 }
 

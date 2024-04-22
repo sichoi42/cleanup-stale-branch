@@ -33,26 +33,26 @@ function _createMessage(
   staleBranchMessage: string,
   deleteBranchMessage: string
 ): string {
-  let message = 'Branch Status Report:\n\n';
+  let message = '**Branch Status Report:**\n\n';
 
   if (staleBranches.length > 0) {
-    message += `${staleBranchMessage}\n`;
+    message += `**${staleBranchMessage}**\n`;
     staleBranches.forEach(branch => {
-      message += ` - ${branch.branchName} (Committer: ${branch.committer.name}, Last Committed Date: ${branch.committer.date})\n`;
+      message += ` - [**${branch.branchName}**](${branch.branchUrl}) (Committer: **${branch.committer.name}**, Last Committed Date: **${branch.committer.date}**)\n`;
     });
     message += '\n';
   } else {
-    message += 'No stale branches.\n\n';
+    message += '**No stale branches.**\n\n';
   }
 
   if (deleteBranches.length > 0) {
-    message += `${deleteBranchMessage}\n`;
+    message += `**${deleteBranchMessage}**\n`;
     deleteBranches.forEach(branch => {
-      message += ` - ${branch.branchName} (Committer: ${branch.committer.name}, Last Committed Date: ${branch.committer.date})\n`;
+      message += ` - [**${branch.branchName}**](${branch.branchUrl}) (Committer: **${branch.committer.name}**, Last Committed Date: **${branch.committer.date}**)\n`;
     });
     message += '\n';
   } else {
-    message += 'No deleted branches.\n\n';
+    message += '**No deleted branches.**\n\n';
   }
 
   return message;

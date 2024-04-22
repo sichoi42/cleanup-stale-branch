@@ -62,6 +62,7 @@ async function _run(): Promise<void> {
           if (!branch.protected && branchDate < deleteDate) {
             deleteBranches.push({
               branchName: branch.name,
+              branchUrl: branchInfo.data._links.html,
               committer: {
                 name: branchInfo.data.commit.commit.committer.name || '',
                 email: branchInfo.data.commit.commit.committer.email || '',
@@ -75,6 +76,7 @@ async function _run(): Promise<void> {
           ) {
             staleBranches.push({
               branchName: branch.name,
+              branchUrl: branchInfo.data._links.html,
               committer: {
                 name: branchInfo.data.commit.commit.committer.name || '',
                 email: branchInfo.data.commit.commit.committer.email || '',
