@@ -7,31 +7,25 @@ import {sendMessage} from './webhook/send-message';
 async function _run(): Promise<void> {
   try {
     const args = _getAndValidateArgs();
-
-    //   curl -L \
-    // -H "Accept: application/vnd.github+json" \
-    // -H "Authorization: Bearer <YOUR-TOKEN>" \
-    // -H "X-GitHub-Api-Version: 2022-11-28" \
-    // https://api.github.com/repos/OWNER/REPO/branches
-
     const octokit = getOctokit(args.repoToken);
     const client = octokit.rest;
 
     const listBranches = await client.repos.listBranches({
       ...context.repo
     });
+    core.info(`Fetched ${listBranches.data.length} branches`);
 
     const ignoringBranchPatternRegex = new RegExp(
       args.cleanStaleBranchOptions.ignoringBranchPattern
     );
-
     const filteredBranches = listBranches.data.filter(branch => {
-      if (
+      const isIgnored =
         args.cleanStaleBranchOptions.ignoringBranches.includes(branch.name) ||
         (args.cleanStaleBranchOptions.ignoringBranchPattern &&
           ignoringBranchPatternRegex.test(branch.name)) ||
-        branch.protected
-      ) {
+        branch.protected;
+
+      if (isIgnored) {
         core.info(
           `Branch "${branch.name}" is protected or matches the delete pattern. Skipping...`
         );
@@ -60,15 +54,21 @@ async function _run(): Promise<void> {
         branch: branch.name
       });
 
-      const commitDateStr = branchInfo.data.commit.commit.committer?.date;
-      if (commitDateStr !== undefined) {
-        const branchDate = new Date(commitDateStr);
-        if (branchDate < staleDate) {
-          staleBranches.push(branch.name);
+      if (branchInfo.data.commit.commit.committer) {
+        const commitDateStr = branchInfo.data.commit.commit.committer.date;
+        if (commitDateStr) {
+          const branchDate = new Date(commitDateStr);
+          if (branchDate < staleDate) {
+            staleBranches.push(branch.name);
+          }
+          if (branchDate < deleteDate) {
+            deleteBranches.push(branch.name);
+          }
         }
-        if (branchDate < deleteDate) {
-          deleteBranches.push(branch.name);
-        }
+      } else {
+        core.info(
+          `No committer information available for branch ${branch.name}`
+        );
       }
     }
 
@@ -90,7 +90,8 @@ async function _run(): Promise<void> {
     core.setOutput('staled-branches', staleBranches.join(', '));
     core.setOutput('deleted-branches', deleteBranches.join(', '));
 
-    if (args.cleanStaleBranchOptions.useWebhook) {
+    if (args.cleanStaleBranchOptions.useWebhook && args.webhookOptions) {
+      core.info(`Webhook URL: ${args.webhookOptions.webhookUrl}`);
       if (staleBranches.length > 0 || deleteBranches.length > 0) {
         const webhookOptions = args.webhookOptions;
         if (webhookOptions) {
@@ -105,6 +106,8 @@ async function _run(): Promise<void> {
       }
     }
   } catch (error) {
+    core.error(`Error: ${error.message}`);
+    core.error(`Stack Trace: ${error.stack}`);
     core.setFailed(error.message);
   }
 }
@@ -149,8 +152,10 @@ function _getAndValidateArgs(): ActionOptions {
 
   if (args.cleanStaleBranchOptions.useWebhook) {
     args.webhookOptions = {
-      webhookUrl: core.getInput('webhook-url'),
-      webhookType: core.getInput('webhook-type') as WebhookType
+      webhookUrl: core.getInput('webhook-url', {required: true}),
+      webhookType: core.getInput('webhook-type', {
+        required: true
+      }) as WebhookType
     };
   }
 
