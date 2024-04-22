@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.9](https://github.com/sichoi42/cleanup-stale-branch/compare/v1.1.8...v1.1.9) (2024-04-22)
+
+
+### Features
+
+* branch url info ([abbbc40](https://github.com/sichoi42/cleanup-stale-branch/commit/abbbc40ec0e29552477dc13762db7317d35d75da))
+* branch url info ([ef39c1e](https://github.com/sichoi42/cleanup-stale-branch/commit/ef39c1e0bdf1b4392e8e5442fa92317d31402e31))
+
 ### [1.1.8](https://github.com/sichoi42/cleanup-stale-branch/compare/v1.1.7...v1.1.8) (2024-04-22)
 
 
