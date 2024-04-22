@@ -32,6 +32,7 @@ jobs:
           days-before-delete: ${{ env.DAYS_BEFORE_DELETE }}
           ignoring-branches: 'main,dev'
           ignore-branches-pattern: 'release/*'
+          dry-run: true
           use-webhook: true
           webhook-url: ${{ secrets.WEBHOOK_URL }}
           webhook-type: 'discord'
