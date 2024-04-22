@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.4](https://github.com/sichoi42/cleanup-stale-branch/compare/v1.1.3...v1.1.4) (2024-04-22)
+
+
+### Bug Fixes
+
+* not include deleteBrances to stalesBranches ([26db600](https://github.com/sichoi42/cleanup-stale-branch/commit/26db60046e214e838a23a421c209cc64ea2d4e79))
+* not include deleteBrances to stalesBranches ([e8d5e9e](https://github.com/sichoi42/cleanup-stale-branch/commit/e8d5e9e01254e350b2935bb66cf87b5d6dc07b9f))
+
 ### [1.1.3](https://github.com/sichoi42/cleanup-stale-branch/compare/v1.1.2...v1.1.3) (2024-04-22)
 
 ### [1.1.2](https://github.com/sichoi42/cleanup-stale-branch/compare/v1.1.1...v1.1.2) (2024-04-22)
