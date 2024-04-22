@@ -3,6 +3,7 @@ import {context, getOctokit} from '@actions/github';
 import {ActionOptions} from './config';
 import {WebhookType} from './webhook/WebhookType';
 import {sendMessage} from './webhook/send-message';
+import {BranchInfo} from './github/type';
 
 async function _run(): Promise<void> {
   try {
@@ -34,8 +35,8 @@ async function _run(): Promise<void> {
       return true;
     });
 
-    const staleBranches: string[] = [];
-    const deleteBranches: string[] = [];
+    const staleBranches: BranchInfo[] = [];
+    const deleteBranches: BranchInfo[] = [];
 
     const currentDate = new Date();
     const staleDate = new Date(currentDate);
@@ -59,10 +60,27 @@ async function _run(): Promise<void> {
         if (commitDateStr) {
           const branchDate = new Date(commitDateStr);
           if (!branch.protected && branchDate < deleteDate) {
-            deleteBranches.push(branch.name);
+            deleteBranches.push({
+              branchName: branch.name,
+              committer: {
+                name: branchInfo.data.commit.commit.committer.name || '',
+                email: branchInfo.data.commit.commit.committer.email || '',
+                date: branchDate
+              }
+            });
           }
-          if (!deleteBranches.includes(branch.name) && branchDate < staleDate) {
-            staleBranches.push(branch.name);
+          if (
+            !deleteBranches.map(b => b.branchName).includes(branch.name) &&
+            branchDate < staleDate
+          ) {
+            staleBranches.push({
+              branchName: branch.name,
+              committer: {
+                name: branchInfo.data.commit.commit.committer.name || '',
+                email: branchInfo.data.commit.commit.committer.email || '',
+                date: branchDate
+              }
+            });
           }
         }
       } else {
@@ -72,23 +90,37 @@ async function _run(): Promise<void> {
       }
     }
 
-    core.info(`Staled branches: ${staleBranches.join(', ')}`);
-    core.info(`Will be deleted branches: ${deleteBranches.join(', ')}`);
+    core.info(
+      `Staled branches: ${staleBranches
+        .map(branch => branch.branchName)
+        .join(', ')}`
+    );
+    core.info(
+      `Will be deleted branches: ${deleteBranches
+        .map(branch => branch.branchName)
+        .join(', ')}`
+    );
 
     if (!args.dryRun) {
       for (const branch of deleteBranches) {
         await client.git.deleteRef({
           ...context.repo,
-          ref: `heads/${branch}`
+          ref: `heads/${branch.branchName}`
         });
-        core.info(`Branch ${branch} deleted.`);
+        core.info(`Branch ${branch.branchName} deleted.`);
       }
     } else {
       core.info('Dry run enabled. Branches will not actually be deleted.');
     }
 
-    core.setOutput('staled-branches', staleBranches.join(', '));
-    core.setOutput('deleted-branches', deleteBranches.join(', '));
+    core.setOutput(
+      'staled-branches',
+      staleBranches.map(b => b.branchName).join(', ')
+    );
+    core.setOutput(
+      'deleted-branches',
+      deleteBranches.map(b => b.branchName).join(', ')
+    );
 
     if (args.cleanStaleBranchOptions.useWebhook && args.webhookOptions) {
       core.info(`Webhook URL: ${args.webhookOptions.webhookUrl}`);

@@ -1,11 +1,12 @@
 import {CleanStaleBranchOptions, WebhookOptions} from '../config';
+import {BranchInfo} from '../github/type';
 import {WebhookType} from './WebhookType';
 
 export async function sendMessage(
   cleanStaleBranchOptions: CleanStaleBranchOptions,
   webhookOptions: WebhookOptions,
-  staleBranches: string[],
-  deleteBranches: string[]
+  staleBranches: BranchInfo[],
+  deleteBranches: BranchInfo[]
 ): Promise<void> {
   const webhookUrl = webhookOptions.webhookUrl;
   const webhookType = webhookOptions.webhookType;
@@ -27,8 +28,8 @@ export async function sendMessage(
 }
 
 function _createMessage(
-  staleBranches: string[],
-  deleteBranches: string[],
+  staleBranches: BranchInfo[],
+  deleteBranches: BranchInfo[],
   staleBranchMessage: string,
   deleteBranchMessage: string
 ): string {
@@ -37,7 +38,7 @@ function _createMessage(
   if (staleBranches.length > 0) {
     message += `${staleBranchMessage}\n`;
     staleBranches.forEach(branch => {
-      message += ` - ${branch}\n`;
+      message += ` - ${branch.branchName} (Committer: ${branch.committer.name}, Last Committed Date: ${branch.committer.date})\n`;
     });
     message += '\n';
   } else {
@@ -47,7 +48,7 @@ function _createMessage(
   if (deleteBranches.length > 0) {
     message += `${deleteBranchMessage}\n`;
     deleteBranches.forEach(branch => {
-      message += ` - ${branch}\n`;
+      message += ` - ${branch.branchName} (Committer: ${branch.committer.name}, Last Committed Date: ${branch.committer.date})\n`;
     });
     message += '\n';
   } else {
