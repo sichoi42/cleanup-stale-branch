@@ -76,10 +76,25 @@ function _run() {
                     if (commitDateStr) {
                         const branchDate = new Date(commitDateStr);
                         if (!branch.protected && branchDate < deleteDate) {
-                            deleteBranches.push(branch.name);
+                            deleteBranches.push({
+                                branchName: branch.name,
+                                committer: {
+                                    name: branchInfo.data.commit.commit.committer.name || '',
+                                    email: branchInfo.data.commit.commit.committer.email || '',
+                                    date: branchDate
+                                }
+                            });
                         }
-                        if (!deleteBranches.includes(branch.name) && branchDate < staleDate) {
-                            staleBranches.push(branch.name);
+                        if (!deleteBranches.map(b => b.branchName).includes(branch.name) &&
+                            branchDate < staleDate) {
+                            staleBranches.push({
+                                branchName: branch.name,
+                                committer: {
+                                    name: branchInfo.data.commit.commit.committer.name || '',
+                                    email: branchInfo.data.commit.commit.committer.email || '',
+                                    date: branchDate
+                                }
+                            });
                         }
                     }
                 }
@@ -87,19 +102,23 @@ function _run() {
                     core.info(`No committer information available for branch ${branch.name}`);
                 }
             }
-            core.info(`Staled branches: ${staleBranches.join(', ')}`);
-            core.info(`Will be deleted branches: ${deleteBranches.join(', ')}`);
+            core.info(`Staled branches: ${staleBranches
+                .map(branch => branch.branchName)
+                .join(', ')}`);
+            core.info(`Will be deleted branches: ${deleteBranches
+                .map(branch => branch.branchName)
+                .join(', ')}`);
             if (!args.dryRun) {
                 for (const branch of deleteBranches) {
-                    yield client.git.deleteRef(Object.assign(Object.assign({}, github_1.context.repo), { ref: `heads/${branch}` }));
-                    core.info(`Branch ${branch} deleted.`);
+                    yield client.git.deleteRef(Object.assign(Object.assign({}, github_1.context.repo), { ref: `heads/${branch.branchName}` }));
+                    core.info(`Branch ${branch.branchName} deleted.`);
                 }
             }
             else {
                 core.info('Dry run enabled. Branches will not actually be deleted.');
             }
-            core.setOutput('staled-branches', staleBranches.join(', '));
-            core.setOutput('deleted-branches', deleteBranches.join(', '));
+            core.setOutput('staled-branches', staleBranches.map(b => b.branchName).join(', '));
+            core.setOutput('deleted-branches', deleteBranches.map(b => b.branchName).join(', '));
             if (args.cleanStaleBranchOptions.useWebhook && args.webhookOptions) {
                 core.info(`Webhook URL: ${args.webhookOptions.webhookUrl}`);
                 if (staleBranches.length > 0 || deleteBranches.length > 0) {
@@ -218,7 +237,7 @@ function _createMessage(staleBranches, deleteBranches, staleBranchMessage, delet
     if (staleBranches.length > 0) {
         message += `${staleBranchMessage}\n`;
         staleBranches.forEach(branch => {
-            message += ` - ${branch}\n`;
+            message += ` - ${branch.branchName} (Committer: ${branch.committer.name}, Last Committed Date: ${branch.committer.date})\n`;
         });
         message += '\n';
     }
@@ -228,7 +247,7 @@ function _createMessage(staleBranches, deleteBranches, staleBranchMessage, delet
     if (deleteBranches.length > 0) {
         message += `${deleteBranchMessage}\n`;
         deleteBranches.forEach(branch => {
-            message += ` - ${branch}\n`;
+            message += ` - ${branch.branchName} (Committer: ${branch.committer.name}, Last Committed Date: ${branch.committer.date})\n`;
         });
         message += '\n';
     }
