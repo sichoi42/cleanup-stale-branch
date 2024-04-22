@@ -1,6 +1,6 @@
 {
   "name": "cleanup-stale-branch",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "private": true,
   "description": "Automatically find up stale branches and cleanup them",
   "main": "lib/main.js",
@@ -19,7 +19,10 @@
     "all:ci": "npm run format && npm run lint && npm run build && npm run test:only-errors",
     "prerelease": "npm run build",
     "release": "standard-version",
-    "release:dry-run": "standard-version --dry-run"
+    "release:dry-run": "standard-version --dry-run",
+    "update-major": "git tag -fa v$npm_config_major -m \"Update v$npm_config_major tag\" && git push origin v$npm_config_major --force",
+    "release:new-major": "standard-version --release-as major",
+    "release:new-major:dry-run": "standard-version --release-as major --dry-run"
   },
   "repository": {
     "type": "git",
