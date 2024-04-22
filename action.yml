@@ -4,7 +4,7 @@ author: "Siwon Choi"
 
 inputs:
   repo-token:
-    description: 'Token for the repository. Can be passed in using `${{ secrets.GITHUB_TOKEN }}`.'
+    description: 'Token for the repository. Can be passed in using `{{ secrets.GITHUB_TOKEN }}`.'
     required: false
     default: '${{ github.token }}'
   days-before-stale:
@@ -40,7 +40,7 @@ inputs:
     required: false
     default: false
   webhook-url:
-    description: 'Webhook URL to send a message when branches are considered for deletion or deleted. Recommend to use `${{ secrets.WEBHOOK_URL }}`.'
+    description: 'Webhook URL to send a message when branches are considered for deletion or deleted. Recommend to use `{{ secrets.WEBHOOK_URL }}`.'
     required: false
     default: ""
   webhook-type:
