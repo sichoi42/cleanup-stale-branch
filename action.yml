@@ -12,7 +12,7 @@ inputs:
     required: false
     default: 30
   days-before-delete:
-    description: 'The age in days before a branch is considered for deletion. Can be passed in using `7`.'
+    description: 'The age in days after a branch is considered stale, before it is deleted. Can be passed in using `7`.'
     required: false
     default: 7
   ignoring-branches:
@@ -30,7 +30,7 @@ inputs:
   delete-branch-message:
     description: 'The message to post on webhook when a branch is deleted.'
     required: false
-    default: "These branches were deleted because they were too stale."
+    default: "These branches were deleted because they were stale."
   dry-run:
     description: 'If true, the action will only log the branches that would be deleted.'
     required: false

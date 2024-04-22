@@ -46,7 +46,9 @@ async function _run(): Promise<void> {
 
     const deleteDate = new Date(currentDate);
     deleteDate.setDate(
-      deleteDate.getDate() - args.cleanStaleBranchOptions.daysBeforeDelete
+      deleteDate.getDate() -
+        (args.cleanStaleBranchOptions.daysBeforeStale +
+          args.cleanStaleBranchOptions.daysBeforeDelete)
     );
 
     for (const branch of filteredBranches) {
