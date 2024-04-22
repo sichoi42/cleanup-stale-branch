@@ -1,6 +1,6 @@
 import {CleanStaleBranchOptions, WebhookOptions} from '../config';
 import {BranchInfo} from '../github/type';
-import {WebhookType} from './WebhookType';
+import {getWebhookHandler} from './WebhookHandlerFactory';
 
 export async function sendMessage(
   cleanStaleBranchOptions: CleanStaleBranchOptions,
@@ -8,86 +8,11 @@ export async function sendMessage(
   staleBranches: BranchInfo[],
   deleteBranches: BranchInfo[]
 ): Promise<void> {
-  const webhookUrl = webhookOptions.webhookUrl;
   const webhookType = webhookOptions.webhookType;
-  const staleBranchMessage = cleanStaleBranchOptions.staleBranchMessage;
-  const deleteBranchMessage = cleanStaleBranchOptions.deleteBranchMessage;
-
-  const message = _createMessage(
-    staleBranches,
-    deleteBranches,
-    staleBranchMessage,
-    deleteBranchMessage
+  const webHookHandler = getWebhookHandler(
+    webhookType,
+    webhookOptions,
+    cleanStaleBranchOptions
   );
-
-  if (webhookType === WebhookType.DISCORD) {
-    await _sendDiscordMessage(webhookUrl, message);
-  } else if (webhookType === WebhookType.SLACK) {
-    await _sendSlackMessage(webhookUrl, message);
-  }
-}
-
-function _createMessage(
-  staleBranches: BranchInfo[],
-  deleteBranches: BranchInfo[],
-  staleBranchMessage: string,
-  deleteBranchMessage: string
-): string {
-  let message = '**Branch Status Report:**\n\n';
-
-  if (staleBranches.length > 0) {
-    message += `**${staleBranchMessage}**\n`;
-    staleBranches.forEach(branch => {
-      message += ` - [**${branch.branchName}**](${branch.branchUrl}) (Committer: **${branch.committer.name}**, Last Committed Date: **${branch.committer.date}**)\n`;
-    });
-    message += '\n';
-  } else {
-    message += '**No stale branches.**\n\n';
-  }
-
-  if (deleteBranches.length > 0) {
-    message += `**${deleteBranchMessage}**\n`;
-    deleteBranches.forEach(branch => {
-      message += ` - [**${branch.branchName}**](${branch.branchUrl}) (Committer: **${branch.committer.name}**, Last Committed Date: **${branch.committer.date}**)\n`;
-    });
-    message += '\n';
-  } else {
-    message += '**No deleted branches.**\n\n';
-  }
-
-  return message;
-}
-
-async function _sendDiscordMessage(
-  webhookUrl: string,
-  message: string
-): Promise<void> {
-  const payload = {
-    content: message
-  };
-
-  await fetch(webhookUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(payload)
-  });
-}
-
-async function _sendSlackMessage(
-  webhookUrl: string,
-  message: string
-): Promise<void> {
-  const payload = {
-    text: message
-  };
-
-  await fetch(webhookUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(payload)
-  });
+  webHookHandler.sendMessages(staleBranches, deleteBranches);
 }
