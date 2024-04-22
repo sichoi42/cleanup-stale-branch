@@ -112,7 +112,7 @@ function _getAndValidateArgs(): ActionOptions {
         core.getInput('days-before-stale', {required: true})
       ),
       daysBeforeDelete: parseFloat(
-        core.getInput('days-before-deletion', {required: true})
+        core.getInput('days-before-delete', {required: true})
       ),
       ignoringBranches: core
         .getInput('ignoring-branches')
@@ -134,7 +134,7 @@ function _getAndValidateArgs(): ActionOptions {
     }
   }
 
-  for (const numberInput of ['days-before-deletion']) {
+  for (const numberInput of ['days-before-delete']) {
     if (isNaN(parseFloat(core.getInput(numberInput)))) {
       const errorMessage = `Option "${numberInput}" did not parse to a valid float`;
       core.setFailed(errorMessage);

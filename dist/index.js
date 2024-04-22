@@ -114,7 +114,7 @@ function _getAndValidateArgs() {
         repoToken: core.getInput('repo-token'),
         cleanStaleBranchOptions: {
             daysBeforeStale: parseFloat(core.getInput('days-before-stale', { required: true })),
-            daysBeforeDelete: parseFloat(core.getInput('days-before-deletion', { required: true })),
+            daysBeforeDelete: parseFloat(core.getInput('days-before-delete', { required: true })),
             ignoringBranches: core
                 .getInput('ignoring-branches')
                 .split(',')
@@ -133,7 +133,7 @@ function _getAndValidateArgs() {
             throw new Error(errorMessage);
         }
     }
-    for (const numberInput of ['days-before-deletion']) {
+    for (const numberInput of ['days-before-delete']) {
         if (isNaN(parseFloat(core.getInput(numberInput)))) {
             const errorMessage = `Option "${numberInput}" did not parse to a valid float`;
             core.setFailed(errorMessage);
