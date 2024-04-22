@@ -75,13 +75,11 @@ function _run() {
                     const commitDateStr = branchInfo.data.commit.commit.committer.date;
                     if (commitDateStr) {
                         const branchDate = new Date(commitDateStr);
-                        if (branchDate < staleDate) {
-                            staleBranches.push(branch.name);
-                        }
-                        if (!branch.protected &&
-                            branchDate < deleteDate &&
-                            !staleBranches.includes(branch.name)) {
+                        if (!branch.protected && branchDate < deleteDate) {
                             deleteBranches.push(branch.name);
+                        }
+                        if (!deleteBranches.includes(branch.name) && branchDate < staleDate) {
+                            staleBranches.push(branch.name);
                         }
                     }
                 }
