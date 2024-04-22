@@ -18,19 +18,19 @@ inputs:
   ignoring-branches:
     description: 'Comma separated list of branches that should be ignored. Default is `main,master`.'
     required: false
-    default: '["main", "master"]'
+    default: "main,master"
   ignore-branches-pattern:
     description: 'Pattern of branches that should be ignored.'
     required: false
-    default: ""
+    default: "release/*"
   stale-branch-message:
     description: 'The message to post on webhook when a branch is considered stale.'
     required: false
-    default: "This branch is considered stale and will be deleted soon."
+    default: "These branches were considered stale and will be deleted in a few days."
   delete-branch-message:
     description: 'The message to post on webhook when a branch is deleted.'
     required: false
-    default: "This branch was deleted because it was stale."
+    default: "These branches were deleted because they were too stale."
   dry-run:
     description: 'If true, the action will only log the branches that would be deleted.'
     required: false

@@ -8,19 +8,19 @@ The action runs on a Node.js environment and executes according to the configura
 
 ## Options
 
-| Option                  | Required | Default                      | Description |
-|-------------------------|----------|------------------------------|-------------|
-| `repo-token`            | No       | `${{ github.token }}`        | Token for the repository. Use `${{ secrets.GITHUB_TOKEN }}` to pass this securely. |
-| `days-before-stale`     | No       | `30`                         | The number of days a branch must be inactive before it is considered stale. |
-| `days-before-delete`    | No       | `7`                          | The number of days a stale branch will remain before it is considered for deletion. |
-| `ignoring-branches`     | No       | `["main", "master"]`         | A comma-separated list of branches that should be ignored. |
-| `ignore-branches-pattern` | No    | `""`                        | A pattern for branches that should be ignored. |
-| `stale-branch-message`  | No       | "This branch is considered stale and will be deleted soon." | The message posted on the webhook when a branch is considered stale. |
-| `delete-branch-message` | No       | "This branch was deleted because it was stale." | The message posted on the webhook when a branch is deleted. |
-| `dry-run`               | No       | `false`                      | If true, the action will only log the branches that would be deleted, without actually deleting them. |
-| `use-webhook`           | No       | `false`                      | If true, sends a message to a webhook when branches are considered for deletion or actually deleted. |
-| `webhook-url`           | No       | `""`                         | The webhook URL to send messages about branch deletions. Use `${{ secrets.WEBHOOK_URL }}` for security. |
-| `webhook-type`          | No       | "discord"                    | The type of webhook to use, e.g., `discord` or `slack`. |
+| Option                    | Required | Default                        | Description |
+|---------------------------|----------|--------------------------------|-------------|
+| `repo-token`              | No       | `${{ github.token }}`          | Token for the repository. Use `${{ secrets.GITHUB_TOKEN }}` to pass this securely. |
+| `days-before-stale`       | No       | `30`                           | The number of days a branch must be inactive before it is considered stale. |
+| `days-before-delete`      | No       | `7`                            | The number of days a stale branch will remain before it is considered for deletion. |
+| `ignoring-branches`       | No       | `main,master`                  | A comma-separated list of branches that should be ignored. |
+| `ignore-branches-pattern` | No       | `release/*`                    | A pattern for branches that should be ignored. |
+| `stale-branch-message`    | No       | "These branches were considered stale and will be deleted in a few days." | The message posted on the webhook when a branch is considered stale. |
+| `delete-branch-message`   | No       | "These branches were deleted because they were too stale." | The message posted on the webhook when a branch is deleted. |
+| `dry-run`                 | No       | `false`                        | If true, the action will only log the branches that would be deleted, without actually deleting them. |
+| `use-webhook`             | No       | `false`                        | If true, sends a message to a webhook when branches are considered for deletion or actually deleted. |
+| `webhook-url`             | No       | `""`                           | The webhook URL to send messages about branch deletions. Use `${{ secrets.WEBHOOK_URL }}` for security. |
+| `webhook-type`            | No       | "discord" (Slack coming soon)  | The type of webhook to use. Currently supports `discord`, with Slack support planned for a future update. |
 
 ## Outputs
 
