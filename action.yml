@@ -1,4 +1,4 @@
-name: "Cleanup Stale Branches Action"
+name: "Cleaning up Stale Branches"
 description: "Automatically find up stale branches and cleanup them"
 author: "Siwon Choi"
 
